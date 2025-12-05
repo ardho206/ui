@@ -4697,7 +4697,7 @@ function Library:Window(p)
             Icon_1.Name = "CloseIcon"
             Icon_1.Parent = BackgroundCloseUI_1
             Icon_1.BackgroundTransparency = 1
-            Icon_1.Size = UDim2.new(0, 18, 0, 18)
+            Icon_1.Size = UDim2.new(0, 28, 0, 28)
             Icon_1.Position = UDim2.new(0, 8, 0.5, -9)
             Icon_1.Image = "rbxassetid://" .. CloseUI.Icon
             Icon_1.ImageRectOffset = Vector2.new(284, 4)
