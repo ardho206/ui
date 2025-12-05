@@ -3969,7 +3969,7 @@ function Library:Window(p)
 	Notification.BorderColor3 = Color3.fromRGB(0,0,0)
 	Notification.BorderSizePixel = 0
 	Notification.Position = UDim2.new(1, 0,1, 0)
-	Notification.Size = UDim2.new(0, 100,0, 100)
+	Notification.Size = UDim2.new(0, 240,0, 240)
 
 	UIPaddingUIListLayoutNotification_1.Parent = Notification
 	UIPaddingUIListLayoutNotification_1.PaddingBottom = UDim.new(0,20)
