@@ -1734,6 +1734,55 @@ function Library:Window(p)
 			return New
 		end
 
+		function Func:SubSection(p)
+			local Title = p.Title or 'null'
+			local SubSectionBackground = Instance.new("Frame")
+			local SubSection = Instance.new("Frame")
+			local SubSection_1 = Instance.new("TextLabel")
+			local UIPadding_1 = Instance.new("UIPadding")
+
+			
+
+			SubSectionBackground.Name = "SubSection Background"
+			SubSectionBackground.Parent = ScrollingFrame_1
+			SubSectionBackground.BackgroundTransparency = 1
+			SubSectionBackground.BorderColor3 = Color3.fromRGB(0,0,0)
+			SubSectionBackground.BorderSizePixel = 0
+			SubSectionBackground.Size = UDim2.new(1, 0,0, 15)
+			SubSectionBackground.ClipsDescendants = true
+
+			SubSection.Name = "Background"
+			SubSection.Parent = SubSectionBackground
+			SubSection.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			SubSection.BackgroundTransparency = 1
+			SubSection.BorderColor3 = Color3.fromRGB(0,0,0)
+			SubSection.BorderSizePixel = 0
+			SubSection.Size = UDim2.new(1, 0,0, 15)
+
+			SubSection_1.Name = "SubSection"
+			SubSection_1.Parent = SubSection
+			SubSection_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			SubSection_1.BackgroundTransparency = 1
+			SubSection_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			SubSection_1.BorderSizePixel = 0
+			SubSection_1.Size = UDim2.new(1, 0,0, 15)
+			SubSection_1.Font = Enum.Font.GothamBold
+			SubSection_1.Text = Title
+			SubSection_1.TextColor3 = Color3.fromRGB(255,255,255)
+			SubSection_1.TextSize = 11
+			SubSection_1.TextXAlignment = Enum.TextXAlignment.Left
+
+			addToTheme('Text & Icon', SubSection_1)
+
+			UIPadding_1.Parent = SubSection
+			UIPadding_1.PaddingLeft = UDim.new(0,8)
+			UIPadding_1.PaddingRight = UDim.new(0,8)
+			local New = {}
+			function New:SetTitle(t)
+				SubSection_1.Text = t
+			end
+		end
+
 		function Func:Toggle(p)
 			local Value = p.Value or false
 			local Image = p.Image or ''
@@ -4520,7 +4569,7 @@ function Library:Window(p)
 			if not firsttime then
 				firsttime = true
 				Tabs:Notify({
-					Title = 'Seraphin On Top!',
+					Title = 'Seraphin',
 					Desc = 'Press the <font color="#FF77A5" size="14">('..tostring(Keybind):gsub("Enum.KeyCode.", "")..')</font> button to hide and show the UI',
 					Time = 10
 				})
@@ -4655,6 +4704,7 @@ function Library:Window(p)
 			CloseUIShadow.ImageColor3 = Color3.fromRGB(24,24,31)
 			CloseUIShadow.ImageTransparency = 0.5
 			CloseUIShadow.ScaleType = Enum.ScaleType.Slice
+			CloseUIShadow.Size = UDim2.new(0, 138,0, 138)
 			CloseUIShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 			CloseUIShadow.Visible = CloseUI.Enabled
 
@@ -4699,12 +4749,8 @@ function Library:Window(p)
             Icon_1.Size = UDim2.new(0, 28, 0, 28)
             Icon_1.Position = UDim2.new(0, 8, 0.5, -14)
             Icon_1.Image = "rbxassetid://" .. CloseUI.Icon
-            Icon_1.ImageRectOffset = Vector2.new(284, 4)
-            Icon_1.ImageRectSize = Vector2.new(24, 24)
 
 			addToTheme('Text & Icon', Icon_1)
-
-			CloseUIShadow.Size = UDim2.new(0, (Icon_1 and 34 or 32) ,0, 40)
 
 			local Click = click(CloseUIShadow)
 			lak(Click, CloseUIShadow)
