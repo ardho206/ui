@@ -4704,7 +4704,7 @@ function Library:Window(p)
 			CloseUIShadow.ImageColor3 = Color3.fromRGB(24,24,31)
 			CloseUIShadow.ImageTransparency = 0.5
 			CloseUIShadow.ScaleType = Enum.ScaleType.Slice
-			CloseUIShadow.Size = UDim2.new(0, 40,0, 40)
+			CloseUIShadow.Size = UDim2.new(0, 50,0, 50)
 			CloseUIShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 			CloseUIShadow.Visible = CloseUI.Enabled
 
@@ -4746,7 +4746,7 @@ function Library:Window(p)
             Icon_1.Name = "CloseIcon"
             Icon_1.Parent = BackgroundCloseUI_1
             Icon_1.BackgroundTransparency = 1
-            Icon_1.Size = UDim2.new(0, 38, 0, 38)
+            Icon_1.Size = UDim2.new(0, 40, 0, 40)
             Icon_1.Position = UDim2.new(0, 0, 0, 0)
             Icon_1.Image = "rbxassetid://" .. CloseUI.Icon
 
