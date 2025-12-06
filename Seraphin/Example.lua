@@ -4704,7 +4704,7 @@ function Library:Window(p)
 			CloseUIShadow.ImageColor3 = Color3.fromRGB(24,24,31)
 			CloseUIShadow.ImageTransparency = 0.5
 			CloseUIShadow.ScaleType = Enum.ScaleType.Slice
-			CloseUIShadow.Size = UDim2.new(0, 100,0, 100)
+			CloseUIShadow.Size = UDim2.new(0, 40,0, 40)
 			CloseUIShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 			CloseUIShadow.Visible = CloseUI.Enabled
 
