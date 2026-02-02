@@ -4,6 +4,9 @@ NextUI.__index = NextUI
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
 
 local function FontMontserrat(weight)
     weight = weight or Enum.FontWeight.Regular
@@ -137,7 +140,7 @@ function NextUI:CreateWindow(props)
     local gui = Instance.new("ScreenGui")
     gui.Name = "NextHubUI"
     gui.ResetOnSpawn = false
-    gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
     window.Gui = gui
 
     local toggleBtn = Instance.new("ImageButton")
@@ -176,28 +179,28 @@ function NextUI:CreateWindow(props)
     header.Parent = main
     makeDraggable(header, main)
 
-    local logo = Instance.new("ImageLabel")
-    logo.Image = logo
-    logo.Size = UDim2.fromOffset(42, 42)
-    logo.Position = UDim2.fromOffset(6, 1.5)
-    logo.BackgroundTransparency = 1
-    logo.ScaleType = Enum.ScaleType.Fit
-    logo.Parent = header
+    local logoImg = Instance.new("ImageLabel")
+    logoImg.Image = logo
+    logoImg.Size = UDim2.fromOffset(42, 42)
+    logoImg.Position = UDim2.fromOffset(6, 1.5)
+    logoImg.BackgroundTransparency = 1
+    logoImg.ScaleType = Enum.ScaleType.Fit
+    logoImg.Parent = header
 
-    local title = Instance.new("TextLabel")
-    title.Text = title
-    title.Size = UDim2.new(1, -20, 0, 44)
-    title.Position = UDim2.fromOffset(54, 0)
-    title.BackgroundTransparency = 1
-    title.FontFace = FontMontserrat(Enum.FontWeight.Bold)
-    title.TextSize = 18
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.TextColor3 = Color3.fromRGB(255,255,255)
-    title.Parent = header
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Text = title
+    textLabel.Size = UDim2.new(1, -20, 0, 44)
+    textLabel.Position = UDim2.fromOffset(54, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.FontFace = FontMontserrat(Enum.FontWeight.Bold)
+    textLabel.TextSize = 18
+    textLabel.TextXAlignment = Enum.TextXAlignment.Left
+    textLabel.TextColor3 = Color3.fromRGB(255,255,255)
+    textLabel.Parent = header
 
     local badge = Instance.new("TextLabel")
     badge.Size = UDim2.new(0, 56, 0, 21)
-    badge.Position = UDim2.new(0, 54 + title.TextBounds.X + 15, 0, 12)
+    badge.Position = UDim2.new(0, 54 + textLabel.TextBounds.X + 15, 0, 12)
     badge.BackgroundColor3 = Color3.fromRGB(100, 180, 255)
     badge.TextColor3 = Color3.fromRGB(255,255,255)
     badge.Text = "BETA"
@@ -208,18 +211,18 @@ function NextUI:CreateWindow(props)
     badge.Parent = header
     Instance.new("UICorner", badge).CornerRadius = UDim.new(0, 5)
 
-    local version = Instance.new("TextLabel")
-    version.Text = version
-    version.Size = UDim2.new(0, 62, 0, 21)
-    version.Position = UDim2.new(0, 54 + title.TextBounds.X + 80, 0, 12)
-    version.BackgroundColor3 = Color3.fromRGB(255, 232, 25)
-    version.TextColor3 = Color3.fromRGB(255,255,255)
-    version.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
-    version.TextSize = 14
-    version.TextXAlignment = Enum.TextXAlignment.Center
-    version.TextYAlignment = Enum.TextYAlignment.Center
-    version.Parent = header
-    Instance.new("UICorner", version).CornerRadius = UDim.new(0, 5)
+    local versionBadge = Instance.new("TextLabel")
+    versionBadge.Text = version
+    versionBadge.Size = UDim2.new(0, 62, 0, 21)
+    versionBadge.Position = UDim2.new(0, 54 + textLabel.TextBounds.X + 80, 0, 12)
+    versionBadge.BackgroundColor3 = Color3.fromRGB(255, 232, 25)
+    versionBadge.TextColor3 = Color3.fromRGB(255,255,255)
+    versionBadge.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
+    versionBadge.TextSize = 14
+    versionBadge.TextXAlignment = Enum.TextXAlignment.Center
+    versionBadge.TextYAlignment = Enum.TextYAlignment.Center
+    versionBadge.Parent = header
+    Instance.new("UICorner", versionBadge).CornerRadius = UDim.new(0, 5)
 
     local closeBtn = Instance.new("ImageButton")
     closeBtn.Size = UDim2.fromOffset(21, 21)
@@ -416,16 +419,16 @@ function NextUI:CreateWindow(props)
             header.Parent = section
             Instance.new("UICorner", header).CornerRadius = UDim.new(0,5)
 
-            local title = Instance.new("TextLabel")
-            title.Text = title
-            title.Size = UDim2.new(1, -40, 1, 0)
-            title.Position = UDim2.new(0,12,0,0)
-            title.BackgroundTransparency = 1
-            title.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
-            title.TextSize = 14
-            title.TextColor3 = Color3.fromRGB(100,180,255)
-            title.TextXAlignment = Enum.TextXAlignment.Left
-            title.Parent = header
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Text = title
+            textLabel.Size = UDim2.new(1, -40, 1, 0)
+            textLabel.Position = UDim2.new(0,12,0,0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
+            textLabel.TextSize = 14
+            textLabel.TextColor3 = Color3.fromRGB(100,180,255)
+            textLabel.TextXAlignment = Enum.TextXAlignment.Left
+            textLabel.Parent = header
 
             local arrow = Instance.new("ImageLabel")
             arrow.Size = UDim2.fromOffset(18,18)
