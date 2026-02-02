@@ -389,7 +389,7 @@ function NextUI:CreateWindow(props)
 
             local title = props.Title or "Section"
 
-            local opened = false
+            local opened = props.Opened or false
             local first = true
 
             local function addDivider(parent)
@@ -495,6 +495,14 @@ function NextUI:CreateWindow(props)
 
             local SectionComponents = {}
 
+            function SectionComponents:AddParagraph(p)
+                if not first then
+                    addDivider(body)
+                end
+                first = false
+                return Components:AddParagraph(p, body)
+            end
+
             function SectionComponents:AddButton(p)
                 if not first then
                     addDivider(body)
@@ -528,6 +536,48 @@ function NextUI:CreateWindow(props)
             end
 
             return SectionComponents
+        end
+
+        function Components:AddParagraph(props, parent)
+            parent = parent or content
+            props = props or {}
+
+            local text = props.Text or "Paragraph"
+            local size = props.TextSize or 14
+            local color = props.Color or Color3.fromRGB(180,180,180)
+            local align = props.TextXAlignment or Enum.TextXAlignment.Left
+
+            local frame = Instance.new("Frame")
+            frame.Size = UDim2.new(1,0,0,30)
+            frame.BackgroundTransparency = 1
+            frame.Parent = parent
+
+            local label = Instance.new("TextLabel")
+            label.Text = text
+            label.Size = UDim2.new(1,0,1,0)
+            label.Position = UDim2.new(0,0,0,0)
+            label.BackgroundTransparency = 1
+            label.TextColor3 = color
+            label.FontFace = FontMontserrat(Enum.FontWeight.Medium)
+            label.TextSize = size
+            label.TextXAlignment = align
+            label.TextYAlignment = Enum.TextYAlignment.Top
+            label.RichText = true
+            label.TextWrapped = true
+            label.Parent = frame
+
+            local Paragraph = {}
+            Paragraph.Frame = frame
+
+            function Paragraph:SetText(t)
+                label.Text = t or ""
+            end
+
+            function Paragraph:Destroy()
+                frame:Destroy()
+            end
+
+            return Paragraph
         end
 
         function Components:AddButton(props, parent)
