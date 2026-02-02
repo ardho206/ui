@@ -1,5 +1,5 @@
-local NextHub = {}
-NextHub.__index = NextHub
+local NextUI = {}
+NextUI.__index = NextUI
 
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -126,8 +126,13 @@ local function makeDraggable(dragArea, target)
     end)
 end
 
-function NextHub:CreateWindow(props)
+function NextUI:CreateWindow(props)
     local window = {}
+
+    local title = props.Title or "NextHub"
+    local logo = props.Logo or "rbxassetid://111607497408853"
+    local version = props.Version or "1.0.0"
+    local game = "Game: " .. (props.Game or "Unknown")
 
     local gui = Instance.new("ScreenGui")
     gui.Name = "NextHubUI"
@@ -172,18 +177,18 @@ function NextHub:CreateWindow(props)
     makeDraggable(header, main)
 
     local logo = Instance.new("ImageLabel")
+    logo.Image = logo
     logo.Size = UDim2.fromOffset(42, 42)
     logo.Position = UDim2.fromOffset(6, 1.5)
     logo.BackgroundTransparency = 1
-    logo.Image = props.Logo or "rbxassetid://111607497408853"
     logo.ScaleType = Enum.ScaleType.Fit
     logo.Parent = header
 
     local title = Instance.new("TextLabel")
+    title.Text = title
     title.Size = UDim2.new(1, -20, 0, 44)
     title.Position = UDim2.fromOffset(54, 0)
     title.BackgroundTransparency = 1
-    title.Text = props.Title or "NextHub"
     title.FontFace = FontMontserrat(Enum.FontWeight.Bold)
     title.TextSize = 18
     title.TextXAlignment = Enum.TextXAlignment.Left
@@ -204,11 +209,11 @@ function NextHub:CreateWindow(props)
     Instance.new("UICorner", badge).CornerRadius = UDim.new(0, 5)
 
     local version = Instance.new("TextLabel")
+    version.Text = version
     version.Size = UDim2.new(0, 62, 0, 21)
     version.Position = UDim2.new(0, 54 + title.TextBounds.X + 80, 0, 12)
     version.BackgroundColor3 = Color3.fromRGB(255, 232, 25)
     version.TextColor3 = Color3.fromRGB(255,255,255)
-    version.Text = props.Version or "v1.0.0"
     version.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
     version.TextSize = 14
     version.TextXAlignment = Enum.TextXAlignment.Center
@@ -216,17 +221,17 @@ function NextHub:CreateWindow(props)
     version.Parent = header
     Instance.new("UICorner", version).CornerRadius = UDim.new(0, 5)
 
-    local close = Instance.new("ImageButton")
-    close.Size = UDim2.fromOffset(21, 21)
-    close.Position = UDim2.new(1, -38, 0, 12)
-    close.BackgroundTransparency = 1
-    close.Image = "rbxassetid://104399607275683"
-    close.ImageColor3 = Color3.fromRGB(190,220,255)
-    close.ScaleType = Enum.ScaleType.Fit
-    close.ZIndex = 10
-    close.Parent = header
+    local closeBtn = Instance.new("ImageButton")
+    closeBtn.Size = UDim2.fromOffset(21, 21)
+    closeBtn.Position = UDim2.new(1, -38, 0, 12)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Image = "rbxassetid://104399607275683"
+    closeBtn.ImageColor3 = Color3.fromRGB(190,220,255)
+    closeBtn.ScaleType = Enum.ScaleType.Fit
+    closeBtn.ZIndex = 10
+    closeBtn.Parent = header
 
-    close.MouseButton1Click:Connect(function()
+    closeBtn.MouseButton1Click:Connect(function()
         gui:Destroy()
     end)
 
@@ -288,11 +293,11 @@ function NextHub:CreateWindow(props)
     Instance.new("UICorner", sidebar).CornerRadius = UDim.new(0,8)
 
     local gameLabel = Instance.new("TextLabel")
+    gameLabel.Text = game
     gameLabel.Size = UDim2.new(1, -10, 0, 34)
     gameLabel.Position = UDim2.new(0, 5, 0, 0)
     gameLabel.BackgroundColor3 = Color3.fromRGB(50,50,50)
     gameLabel.BackgroundTransparency = 0.25
-    gameLabel.Text = "Game: " .. (props.Game or "Unknown")
     gameLabel.TextColor3 = Color3.fromRGB(100, 180, 255)
     gameLabel.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
     gameLabel.TextSize = 14
@@ -314,6 +319,9 @@ function NextHub:CreateWindow(props)
     function window:AddTab(tabProps)
         local Components = {}
 
+        local title = tabProps.Title or "Tab"
+        local icon = tabProps.Icon or nil
+
         local index = #self.Tabs + 1
         self.Tabs[index] = tabProps
 
@@ -328,8 +336,8 @@ function NextHub:CreateWindow(props)
         Instance.new("UICorner", btn).CornerRadius = UDim.new(0,5)
 
         if tabProps.Icon then
-            local id = GetIconID(tabProps.Icon)
-            if not id then warn("Icon not found for tab:", tabProps.Name or "Tab") end
+            local id = GetIconID(icon)
+            if not id then warn("Icon not found for tab:", title) end
             local icon = Instance.new("ImageLabel")
             icon.Size = UDim2.fromOffset(22,22)
             icon.Position = UDim2.new(0,20,0.5,-11)
@@ -339,10 +347,10 @@ function NextHub:CreateWindow(props)
         end
 
         local label = Instance.new("TextLabel")
+        label.Text = title
         label.Size = UDim2.new(1, -50, 1, 0)
         label.Position = UDim2.new(0,50,0,0)
         label.BackgroundTransparency = 1
-        label.Text = tabProps.Name or "Tab"
         label.TextColor3 = Color3.fromRGB(255,255,255)
         label.FontFace = FontMontserrat(Enum.FontWeight.Medium)
         label.TextSize = 12
@@ -379,6 +387,8 @@ function NextHub:CreateWindow(props)
         function Components:AddSection(props)
             props = props or {}
 
+            local title = props.Title or "Section"
+
             local opened = false
             local first = true
 
@@ -399,7 +409,6 @@ function NextHub:CreateWindow(props)
             section.BackgroundTransparency = 1
             section.Parent = content
 
-            -- header
             local header = Instance.new("Frame")
             header.Size = UDim2.new(1, 0, 0, 40)
             header.BackgroundColor3 = Color3.fromRGB(20,20,20)
@@ -408,17 +417,16 @@ function NextHub:CreateWindow(props)
             Instance.new("UICorner", header).CornerRadius = UDim.new(0,5)
 
             local title = Instance.new("TextLabel")
+            title.Text = title
             title.Size = UDim2.new(1, -40, 1, 0)
             title.Position = UDim2.new(0,12,0,0)
             title.BackgroundTransparency = 1
-            title.Text = props.Title or "Section"
             title.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
             title.TextSize = 14
             title.TextColor3 = Color3.fromRGB(100,180,255)
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = header
 
-            -- arrow
             local arrow = Instance.new("ImageLabel")
             arrow.Size = UDim2.fromOffset(18,18)
             arrow.Position = UDim2.new(1,-26,0.5,-9)
@@ -427,7 +435,6 @@ function NextHub:CreateWindow(props)
             arrow.ImageColor3 = Color3.fromRGB(100,180,255)
             arrow.Parent = header
 
-            -- body
             local body = Instance.new("Frame")
             body.AutomaticSize = Enum.AutomaticSize.None
             body.Size = UDim2.new(1,0,0,0)
@@ -486,7 +493,6 @@ function NextHub:CreateWindow(props)
                 }):Play()
             end)
 
-            -- section components api
             local SectionComponents = {}
 
             function SectionComponents:AddButton(p)
@@ -528,6 +534,9 @@ function NextHub:CreateWindow(props)
             parent = parent or content
             props = props or {}
 
+            local title = props.Title or "Button"
+            local callback = props.Callback
+
             local frame = Instance.new("Frame")
             frame.Size = UDim2.new(1, 0, 0, 45)
             frame.BackgroundTransparency = 1
@@ -545,10 +554,10 @@ function NextHub:CreateWindow(props)
             icon.Parent = frame
 
             local textLabel = Instance.new("TextLabel")
+            textLabel.Text = title
             textLabel.Size = UDim2.new(1, -46, 1, 0)
             textLabel.Position = UDim2.new(0,62,0,-1.5)
             textLabel.BackgroundTransparency = 1
-            textLabel.Text = props.Title or "Button"
             textLabel.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
             textLabel.TextSize = props.TextSize or 16
             textLabel.TextColor3 = Color3.fromRGB(100, 180, 255)
@@ -561,8 +570,8 @@ function NextHub:CreateWindow(props)
             click.Text = ""
             click.Parent = frame
 
-            if typeof(props.Callback) == "function" then
-                click.MouseButton1Click:Connect(props.Callback)
+            if typeof(callback) == "function" then
+                click.MouseButton1Click:Connect(callback)
             end
 
             local Button = {}
@@ -580,6 +589,11 @@ function NextHub:CreateWindow(props)
             parent = parent or content
             props = props or {}
 
+            local title = props.Title or "Input"
+            local placeholder = props.Placeholder or "Value.."
+            local default = props.Default or ""
+            local callback = props.Callback
+
             local frame = Instance.new("Frame")
             frame.Size = UDim2.new(1, 0, 0, 45)
             frame.BackgroundTransparency = 1
@@ -587,10 +601,10 @@ function NextHub:CreateWindow(props)
             Instance.new("UICorner", frame).CornerRadius = UDim.new(0,5)
 
             local textLabel = Instance.new("TextLabel")
+            textLabel.Text = title
             textLabel.Size = UDim2.new(0.5, -10, 1, 0)
             textLabel.Position = UDim2.new(0,18,0,-1.5)
             textLabel.BackgroundTransparency = 1
-            textLabel.Text = props.Title or "Input"
             textLabel.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
             textLabel.TextSize = props.TextSize or 16
             textLabel.TextColor3 = Color3.fromRGB(100, 180, 255)
@@ -614,8 +628,8 @@ function NextHub:CreateWindow(props)
             box.Position = UDim2.new(0,8,0,0)
             box.Size = UDim2.new(1,-16,1,0)
             box.BackgroundTransparency = 1
-            box.PlaceholderText = props.Placeholder or "Value..."
-            box.Text = props.Default or ""
+            box.PlaceholderText = placeholder
+            box.Text = default
             box.ClearTextOnFocus = false
             box.FontFace = FontMontserrat(Enum.FontWeight.Medium)
             box.TextSize = 14
@@ -627,8 +641,8 @@ function NextHub:CreateWindow(props)
             local function setValue(v, silent)
                 v = tostring(v or "")
                 box.Text = v
-                if not silent and typeof(props.Callback) == "function" then
-                    props.Callback(v)
+                if not silent and typeof(callback) == "function" then
+                    callback(v)
                 end
             end
 
@@ -659,6 +673,9 @@ function NextHub:CreateWindow(props)
             parent = parent or content
             props = props or {}
 
+            local title = props.Title or "Toggle"
+            local callback = props.Callback
+
             local state = props.Default or false
 
             local frame = Instance.new("Frame")
@@ -668,17 +685,16 @@ function NextHub:CreateWindow(props)
             Instance.new("UICorner", frame).CornerRadius = UDim.new(0,5)
 
             local textLabel = Instance.new("TextLabel")
+            textLabel.Text = title
             textLabel.Size = UDim2.new(0.5, -10, 1, 0)
             textLabel.Position = UDim2.new(0,18,0,-1.5)
             textLabel.BackgroundTransparency = 1
-            textLabel.Text = props.Title or "Toggle"
             textLabel.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
             textLabel.TextSize = props.TextSize or 16
             textLabel.TextColor3 = Color3.fromRGB(100, 180, 255)
             textLabel.TextXAlignment = Enum.TextXAlignment.Left
             textLabel.Parent = frame
 
-            -- rail
             local rail = Instance.new("Frame")
             rail.Size = UDim2.fromOffset(40,20)
             rail.Position = UDim2.new(1,-50,0.5,-10)
@@ -686,7 +702,6 @@ function NextHub:CreateWindow(props)
             rail.Parent = frame
             Instance.new("UICorner", rail).CornerRadius = UDim.new(1,0)
 
-            -- knob
             local knob = Instance.new("Frame")
             knob.Size = UDim2.fromOffset(16,16)
             knob.Position = state and UDim2.new(1,-18,0.5,-8) or UDim2.new(0,2,0.5,-8)
@@ -709,8 +724,8 @@ function NextHub:CreateWindow(props)
                     Position = state and UDim2.new(1,-18,0.5,-8) or UDim2.new(0,2,0.5,-8)
                 }):Play()
 
-                if props.Callback then
-                    props.Callback(state)
+                if typeof(callback) == "function" then
+                    callback(state)
                 end
             end
 
@@ -743,19 +758,20 @@ function NextHub:CreateWindow(props)
             parent = parent or content
             props = props or {}
 
-            local Search = props.Search or false
-            local Multi = props.Multi or false
+            local title = props.Title or "Dropdown"
+            local search = props.Search or false
+            local multi = props.Multi or false
+            local options = props.Options or {}
+            local selected = multi and {} or props.Default
+            local callback = props.Callback
 
             local ITEM_HEIGHT = 26
             local MAX_VISIBLE = 6
             local POOL_SIZE = MAX_VISIBLE + 2
 
             local opened = false
-            local options = props.Options or {}
             local filtered = {}
-            local selected = Multi and {} or props.Default
 
-            -- frame
             local frame = Instance.new("Frame")
             frame.Size = UDim2.new(1,0,0,45)
             frame.BackgroundTransparency = 1
@@ -763,17 +779,16 @@ function NextHub:CreateWindow(props)
             Instance.new("UICorner", frame).CornerRadius = UDim.new(0,5)
 
             local label = Instance.new("TextLabel")
+            label.Text = title
             label.Size = UDim2.new(0.5,-10,1,0)
             label.Position = UDim2.new(0,18,0,-1.5)
             label.BackgroundTransparency = 1
-            label.Text = props.Title or "Dropdown"
             label.FontFace = FontMontserrat(Enum.FontWeight.SemiBold)
             label.TextSize = 16
             label.TextColor3 = Color3.fromRGB(100,180,255)
             label.TextXAlignment = Enum.TextXAlignment.Left
             label.Parent = frame
 
-            -- box
             local boxFrame = Instance.new("Frame")
             boxFrame.Size = UDim2.new(0.5,-20,1,-16)
             boxFrame.Position = UDim2.new(0.5,12,0,8)
@@ -792,8 +807,8 @@ function NextHub:CreateWindow(props)
             box.Position = UDim2.new(0,8,0,0)
             box.BackgroundTransparency = 1
             box.ClearTextOnFocus = false
-            box.TextEditable = Search
-            box.Active = Search
+            box.TextEditable = search
+            box.Active = search
             box.Text = props.Placeholder or "select..."
             box.FontFace = FontMontserrat(Enum.FontWeight.Medium)
             box.TextSize = 14
@@ -809,7 +824,6 @@ function NextHub:CreateWindow(props)
             arrow.ImageColor3 = Color3.fromRGB(180,180,180)
             arrow.Parent = boxFrame
 
-            -- dropdown list
             local list = Instance.new("ScrollingFrame")
             list.Size = UDim2.new(1,0,0,0)
             list.Position = UDim2.new(0,0,1,6)
@@ -821,7 +835,6 @@ function NextHub:CreateWindow(props)
             list.Parent = boxFrame
             Instance.new("UICorner", list).CornerRadius = UDim.new(0,5)
 
-            -- virtual pool
             local pool = {}
 
             for i = 1, POOL_SIZE do
@@ -839,7 +852,7 @@ function NextHub:CreateWindow(props)
                     local value = btn:GetAttribute("Value")
                     if not value then return end
 
-                    if Multi then
+                    if multi then
                         selected[value] = not selected[value]
                         btn.TextColor3 = selected[value]
                             and Color3.fromRGB(100,180,255)
@@ -850,15 +863,14 @@ function NextHub:CreateWindow(props)
                         close()
                     end
 
-                    if props.OnSelected then
-                        props.OnSelected(selected)
+                    if typeof(callback) == "function" then
+                        callback(selected)
                     end
                 end)
 
                 pool[i] = btn
             end
 
-            -- filter
             local function applyFilter(text)
                 table.clear(filtered)
                 text = text and string.lower(text)
@@ -872,7 +884,6 @@ function NextHub:CreateWindow(props)
                 list.CanvasSize = UDim2.new(0,0,0,#filtered * ITEM_HEIGHT)
             end
 
-            -- render window
             local function render()
                 local scroll = list.CanvasPosition.Y
                 local start = math.floor(scroll / ITEM_HEIGHT) + 1
@@ -887,7 +898,7 @@ function NextHub:CreateWindow(props)
                         btn.Text = value
                         btn:SetAttribute("Value", value)
 
-                        if Multi then
+                        if multi then
                             btn.TextColor3 = selected[value]
                                 and Color3.fromRGB(100,180,255)
                                 or Color3.fromRGB(255,255,255)
@@ -901,11 +912,10 @@ function NextHub:CreateWindow(props)
 
             list:GetPropertyChangedSignal("CanvasPosition"):Connect(render)
 
-            -- open / close
             function open()
                 opened = true
                 list.Visible = true
-                applyFilter(Search and box.Text or nil)
+                applyFilter(search and box.Text or nil)
                 render()
 
                 TweenService:Create(list, TweenInfo.new(0.18), {
@@ -933,8 +943,7 @@ function NextHub:CreateWindow(props)
                 end
             end)
 
-            -- debounce search
-            if Search then
+            if search then
                 local tick = 0
                 box:GetPropertyChangedSignal("Text"):Connect(function()
                     tick = tick + 1
@@ -949,13 +958,12 @@ function NextHub:CreateWindow(props)
                 end)
             end
 
-            -- api
             local Dropdown = {}
 
             Dropdown.Frame = frame
 
             function Dropdown:SetValue(v)
-                if Multi then
+                if multi then
                     selected = {}
                     for _,opt in ipairs(v or {}) do
                         selected[opt] = true
@@ -974,7 +982,7 @@ function NextHub:CreateWindow(props)
             function Dropdown:Refresh(newOptions)
                 task.spawn(function()
                     options = newOptions or {}
-                    applyFilter(Search and box.Text or nil)
+                    applyFilter(search and box.Text or nil)
                     render()
                 end)
             end
@@ -1008,4 +1016,4 @@ function NextHub:CreateWindow(props)
     return window
 end
 
-return NextHub
+return NextUI
