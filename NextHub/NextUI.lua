@@ -281,7 +281,7 @@ function NextHub:CreateWindow(props)
 		ImageColor3 = Color3.fromRGB(190,220,255),
 		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 10,
-        Active = true,
+		Active = true,
 		Parent = header
 	})
 	closeBtn.Activated:Connect(function()
@@ -298,7 +298,7 @@ function NextHub:CreateWindow(props)
 		ImageColor3 = Color3.fromRGB(190,220,255),
 		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 10,
-        Active = true,
+		Active = true,
 		Parent = header
 	})
 
@@ -314,24 +314,28 @@ function NextHub:CreateWindow(props)
 		ImageColor3 = Style.Text,
 		Visible = true, 
 		Active = true,
-		Draggable = true,
+		AutoButtonColor = false,
+		Selectable = true,
 		ZIndex = 100
 	})
+	MakeDraggable(toggleBtn, toggleBtn)
 
 	Create("UICorner", { CornerRadius = UDim.new(0, 5), Parent = toggleBtn })
 	Create("UIStroke", { Color = Style.InputStroke, Thickness = 1, Parent = toggleBtn })
 
 	local function ToggleUI()
 		IsMinimized = not IsMinimized
+
 		if IsMinimized then
 			MainFrame.Visible = false
 			TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-				Size = UDim2.new(0,0,0,0), 
+				Size = UDim2.new(0,0,0,0),
 				BackgroundTransparency = 1
 			}):Play()
 		else
 			MainFrame.Visible = true
-			MainFrame.Size = UDim2.new(0, 0, 0, 0)
+			MainFrame.Size = UDim2.new(0,0,0,0)
+
 			TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
 				Size = InitialSize,
 				BackgroundTransparency = 0.1
@@ -571,7 +575,7 @@ function NextHub:CreateWindow(props)
 			BackgroundColor3 = (index == 1) and Style.Primary or Color3.fromRGB(50,50,50),
 			BackgroundTransparency = (index == 1) and 0.75 or 1,
 			AutoButtonColor = false,
-            Active = true,
+			Active = true,
 			Parent = ButtonsHolder
 		})
 		self.TabButtons[index] = btn
@@ -834,7 +838,7 @@ function NextHub:CreateWindow(props)
 					Parent = ParagraphFrame
 				})
 			end
-			
+
 			LastElementType = "Component"
 
 			local ParagraphObject = { Frame = ParagraphFrame }
@@ -866,7 +870,7 @@ function NextHub:CreateWindow(props)
 				BorderSizePixel = 0,
 				Size = UDim2.new(1, 0, 0, 38),
 				LayoutOrder = ElementIndex,
-                Active = true
+				Active = true
 			})
 
 			if ButtonIcon then
@@ -906,11 +910,11 @@ function NextHub:CreateWindow(props)
 				Size = UDim2.new(1, 0, 1, 0),
 				Text = "",
 				ZIndex = 10,
-                Active = true
+				Active = true
 			})
 
 			ClickBtn.Activated:Connect(function()
-                if typeof(Callback) == "function" then Callback() end
+				if typeof(Callback) == "function" then Callback() end
 			end)
 
 			LastElementType = "Component"
@@ -1038,7 +1042,7 @@ function NextHub:CreateWindow(props)
 				BorderSizePixel = 0,
 				Size = UDim2.new(1, 0, 0, 38),
 				LayoutOrder = ElementIndex,
-                Active = true
+				Active = true
 			})
 
 			local Label = Create("TextLabel", {
@@ -1077,7 +1081,7 @@ function NextHub:CreateWindow(props)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, 0, 1, 0),
 				Text = "",
-                Active = true
+				Active = true
 			})
 
 			LastElementType = "Component"
@@ -1159,7 +1163,7 @@ function NextHub:CreateWindow(props)
 				ClipsDescendants = true,
 				ZIndex = 2,
 				LayoutOrder = ElementIndex,
-                Active = true,
+				Active = true,
 			})
 
 			local Label = Create("TextLabel", {
@@ -1204,7 +1208,7 @@ function NextHub:CreateWindow(props)
 				Size = UDim2.new(1, 0, 0, 38),
 				Text = "",
 				ZIndex = 3,
-                Active = true
+				Active = true
 			})
 
 			local SearchBar = Create("TextBox", {
@@ -1339,7 +1343,7 @@ function NextHub:CreateWindow(props)
 						ZIndex = 3,
 						AutoButtonColor = false,
 						ClipsDescendants = true,
-                        Active = true
+						Active = true
 					})
 					Create("UICorner", { CornerRadius = UDim.new(0, 5), Parent = ItemButton })
 
