@@ -172,6 +172,7 @@ local function saveConfig()
 		end)
 	end
 end
+loadConfig()
 
 -- ==========================================
 -- NEXTHUB UI: MAIN WINDOW
@@ -323,11 +324,16 @@ function NextHub:CreateWindow(props)
 		IsMinimized = not IsMinimized
 		if IsMinimized then
 			MainFrame.Visible = false
+			TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+				Size = UDim2.new(0,0,0,0), 
+				BackgroundTransparency = 1
+			}):Play()
 		else
 			MainFrame.Visible = true
 			MainFrame.Size = UDim2.new(0, 0, 0, 0)
 			TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-				Size = InitialSize
+				Size = InitialSize,
+				BackgroundTransparency = 0.1
 			}):Play()
 		end
 	end
@@ -385,7 +391,7 @@ function NextHub:CreateWindow(props)
 		BackgroundColor3 = Style.Primary,
 		BorderSizePixel = 0,
 		Position = UDim2.new(0, 0, 0, 0),
-		Size = UDim2.new(0, 3, 0, 20),
+		Size = UDim2.new(0, 4, 0, 26),
 		Visible = false,
 		ZIndex = 2
 	})
@@ -539,13 +545,14 @@ function NextHub:CreateWindow(props)
 		}):Play()
 	end
 
-    -- ==========================================
-    -- TAB COMPONENT
-    -- ==========================================
+	-- ==========================================
+	-- TAB COMPONENT
+	-- ==========================================
 	function Window:AddTab(tabProps)
 		local Components = {}
 		local ElementIndex = 0
 		local CurrentGroup
+		local LastElementType = nil
 
 		tabProps = tabProps or {}
 
@@ -625,7 +632,7 @@ function NextHub:CreateWindow(props)
 				BackgroundColor3 = Style.Outline,
 				BackgroundTransparency = 0.3,
 				BorderSizePixel = 0,
-				Size = UDim2.new(1, 0, 0, 1),
+				Size = UDim2.new(1, 0, 0, 1.5),
 				LayoutOrder = ElementIndex
 			})
 
@@ -704,7 +711,6 @@ function NextHub:CreateWindow(props)
 			Create("UIListLayout", {
 				Parent = CurrentGroup,
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 6)
 			})
 			Create("UICorner", {
 				Parent = CurrentGroup,
@@ -738,6 +744,8 @@ function NextHub:CreateWindow(props)
 				Create("UICorner", {CornerRadius = UDim.new(0.8, 0), Parent = Separator})
 			end)
 
+			LastElementType = "Section"
+
 			local SectionObject = { Frame = SectionContainer }
 			return SectionObject
 		end
@@ -751,9 +759,8 @@ function NextHub:CreateWindow(props)
 			local ParagraphTitle = props.Title or ""
 			local ParagraphText = props.Text or "Paragraph text goes here..."
 			local ParagraphColor = props.Color or Style.Text
-			
-			if ElementIndex > 0 then
-				ElementIndex = ElementIndex + 1
+
+			if LastElementType == "Component" then
 				AddDivider()
 			end
 
@@ -825,6 +832,8 @@ function NextHub:CreateWindow(props)
 					Parent = ParagraphFrame
 				})
 			end
+			
+			LastElementType = "Component"
 
 			local ParagraphObject = { Frame = ParagraphFrame }
 			function ParagraphObject:SetText(t) TextLabel.Text = t end
@@ -840,9 +849,8 @@ function NextHub:CreateWindow(props)
 			local ButtonTitle = props.Title or "Button"
 			local ButtonIcon = props.Icon
 			local Callback = props.Callback or function() end
-			
-			if ElementIndex > 0 then
-				ElementIndex = ElementIndex + 1
+
+			if LastElementType == "Component" then
 				AddDivider()
 			end
 
@@ -923,6 +931,8 @@ function NextHub:CreateWindow(props)
 				Callback()
 			end)
 
+			LastElementType = "Component"
+
 			local ButtonObject = { Frame = ButtonFrame }
 			function ButtonObject:SetText(t) TextLabel.Text = t end
 			return ButtonObject
@@ -942,9 +952,8 @@ function NextHub:CreateWindow(props)
 
 			if ConfigData[ConfigKey] ~= nil then InputDefault = ConfigData[ConfigKey] end
 			local InputValue = InputDefault
-			
-			if ElementIndex > 0 then
-				ElementIndex = ElementIndex + 1
+
+			if LastElementType == "Component" then
 				AddDivider()
 			end
 
@@ -1009,6 +1018,8 @@ function NextHub:CreateWindow(props)
 				setValue(box.Text)
 			end)
 
+			LastElementType = "Component"
+
 			local InputObject = { Frame = InputFrame }
 			function InputObject:SetValue(v) setValue(v, true) end
 			function InputObject:GetValue() return box.Text end
@@ -1030,9 +1041,8 @@ function NextHub:CreateWindow(props)
 
 			if ConfigData[ConfigKey] ~= nil then ToggleDefault = ConfigData[ConfigKey] end
 			local Toggled = ToggleDefault
-			
-			if ElementIndex > 0 then
-				ElementIndex = ElementIndex + 1
+
+			if LastElementType == "Component" then
 				AddDivider()
 			end
 
@@ -1086,6 +1096,8 @@ function NextHub:CreateWindow(props)
 				Text = ""
 			})
 
+			LastElementType = "Component"
+
 			local ToggleObject = { Value = ToggleDefault }
 
 			local function UpdateToggleState(newValue)
@@ -1131,22 +1143,27 @@ function NextHub:CreateWindow(props)
 			local Callback = props.Callback or function() end
 			local ConfigKey = props.ConfigKey or DropdownName
 			local IsMulti = props.Multi or false
+			local SingleSelected = Default
 			local Selected = {}
 
 			if IsMulti then
 				Selected = type(ConfigData[ConfigKey]) == "table" and ConfigData[ConfigKey] or {}
 			else
-				if ConfigData[ConfigKey] ~= nil and table.find(Items, ConfigData[ConfigKey]) then
-					Default = ConfigData[ConfigKey]
+				if type(ConfigData[ConfigKey]) == "table" then
+					local first = ConfigData[ConfigKey][1]
+					if first and table.find(Items, first) then
+						Default = first
+						SingleSelected = Default
+					end
 				end
 			end
 
-			if ElementIndex > 0 then
-				ElementIndex = ElementIndex + 1
+
+			if LastElementType == "Component" then
 				AddDivider()
 			end
 
-			ElementIndex = ElementIndex + 1
+			ElementIndex  = ElementIndex + 1
 
 			local DropdownFrame = Create("Frame", {
 				Name = "DropdownFrame",
@@ -1283,7 +1300,7 @@ function NextHub:CreateWindow(props)
 
 			Button.MouseButton1Click:Connect(ToggleDropdown)
 			SearchBar:GetPropertyChangedSignal("Text"):Connect(function() UpdateList(SearchBar.Text) end)
-			
+
 			local function UpdateItemVisual(btn, item)
 				if IsMulti then
 					if table.find(Selected, item) then
@@ -1294,7 +1311,7 @@ function NextHub:CreateWindow(props)
 						btn.TextColor3 = Style.TextDim
 					end
 				else
-					if CurrentValue.Text == item then
+					if SingleSelected == item then
 						btn.BackgroundColor3 = Style.Primary
 						btn.TextColor3 = Style.Text
 					else
@@ -1303,7 +1320,7 @@ function NextHub:CreateWindow(props)
 					end
 				end
 			end
-			
+
 			local function UpdateDisplayText()
 				if not IsMulti then return end
 
@@ -1317,7 +1334,7 @@ function NextHub:CreateWindow(props)
 					CurrentValue.Text = Selected[1] .. ", +" .. (#Selected - 1)
 				end
 			end
-			
+
 			local function RefreshItems(newItems)
 				Items = newItems or Items
 				for _, btn in pairs(ItemButtons) do btn:Destroy() end
@@ -1338,9 +1355,9 @@ function NextHub:CreateWindow(props)
 						ClipsDescendants = true
 					})
 					Create("UICorner", { CornerRadius = UDim.new(0, 5), Parent = ItemButton })
-					
+
 					UpdateItemVisual(ItemButton, item)
-					
+
 					ItemButton.MouseButton1Click:Connect(function()
 						if IsMulti then
 							if table.find(Selected, item) then
@@ -1348,18 +1365,25 @@ function NextHub:CreateWindow(props)
 							else
 								table.insert(Selected, item)
 							end
-							
+
 							for _, btn in pairs(ItemButtons) do
 								UpdateItemVisual(btn, btn.Text)
 							end
-							
+
 							UpdateDisplayText()
 							ConfigData[ConfigKey] = Selected
 							Callback(Selected)
 						else
+							SingleSelected = item
 							CurrentValue.Text = item
-							ConfigData[ConfigKey] = item
-							Callback(item)
+
+							ConfigData[ConfigKey] = { item }
+							Callback({ item })
+
+							for _, btn in pairs(ItemButtons) do
+								UpdateItemVisual(btn, btn.Text)
+							end
+
 							ToggleDropdown()
 						end
 					end)
@@ -1371,11 +1395,13 @@ function NextHub:CreateWindow(props)
 			ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 				DropdownContainer.CanvasSize = UDim2.new(0, 0, 0, ListLayout.AbsoluteContentSize.Y + 8)
 			end)
-			
+
 			if IsMulti then
 				UpdateDisplayText()
 			end
-			
+
+			LastElementType = "Component"
+
 			local DropdownObject = { Items = Items, Value = Default }
 
 			function DropdownObject:Refresh(newItems)
@@ -1407,15 +1433,22 @@ function NextHub:CreateWindow(props)
 					UpdateDisplayText()
 					ConfigData[ConfigKey] = Selected
 					Callback(Selected)
-
 				else
-					if type(value) ~= "string" then value = tostring(value) end
-					if table.find(self.Items, value) then
-						CurrentValue.Text = value
-						self.Value = value
-						ConfigData[ConfigKey] = value
-						Callback(value)
+					if typeof(value) ~= "table" then return end
+
+					Selected = {}
+
+					for _, v in ipairs(value) do
+						if table.find(self.Items, v) then
+							table.insert(Selected, v)
+						end
 					end
+
+					SingleSelected = Selected[1]
+					CurrentValue.Text = SingleSelected or "Select..."
+
+					ConfigData[ConfigKey] = Selected
+					Callback(Selected)
 				end
 
 			end
