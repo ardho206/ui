@@ -1125,7 +1125,7 @@ function NextHub:CreateWindow(props)
 		function Components:AddDropdown(props, section)
 			props = props or {}
 
-			local DropdownName = props.Name or "Dropdown"
+			local DropdownName = props.Title or "Dropdown"
 			local Items = props.Options or {}
 			local Default = props.Default or Items[1]
 			local Callback = props.Callback or function() end
