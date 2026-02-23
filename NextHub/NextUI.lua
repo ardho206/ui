@@ -172,7 +172,6 @@ local function saveConfig()
 		end)
 	end
 end
-loadConfig()
 
 -- ==========================================
 -- NEXTHUB UI: MAIN WINDOW
@@ -282,9 +281,10 @@ function NextHub:CreateWindow(props)
 		ImageColor3 = Color3.fromRGB(190,220,255),
 		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 10,
+        Active = true,
 		Parent = header
 	})
-	closeBtn.MouseButton1Click:Connect(function()
+	closeBtn.Activated:Connect(function()
 		TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
 		task.wait(0.3)
 		ScreenGui:Destroy()
@@ -298,6 +298,7 @@ function NextHub:CreateWindow(props)
 		ImageColor3 = Color3.fromRGB(190,220,255),
 		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 10,
+        Active = true,
 		Parent = header
 	})
 
@@ -337,8 +338,8 @@ function NextHub:CreateWindow(props)
 			}):Play()
 		end
 	end
-	toggleBtn.MouseButton1Click:Connect(ToggleUI)
-	minimizeBtn.MouseButton1Click:Connect(ToggleUI)
+	toggleBtn.Activated:Connect(ToggleUI)
+	minimizeBtn.Activated:Connect(ToggleUI)
 
 	local Sidebar = Create("Frame", {
 		Name = "Sidebar",
@@ -570,6 +571,7 @@ function NextHub:CreateWindow(props)
 			BackgroundColor3 = (index == 1) and Style.Primary or Color3.fromRGB(50,50,50),
 			BackgroundTransparency = (index == 1) and 0.75 or 1,
 			AutoButtonColor = false,
+            Active = true,
 			Parent = ButtonsHolder
 		})
 		self.TabButtons[index] = btn
@@ -660,7 +662,7 @@ function NextHub:CreateWindow(props)
 			MoveIndicatorToButton(btn)
 		end
 
-		btn.MouseButton1Click:Connect(function()
+		btn.Activated:Connect(function()
 			ActivateTab()
 		end)
 
@@ -863,7 +865,8 @@ function NextHub:CreateWindow(props)
 				BackgroundTransparency = 1,
 				BorderSizePixel = 0,
 				Size = UDim2.new(1, 0, 0, 38),
-				LayoutOrder = ElementIndex
+				LayoutOrder = ElementIndex,
+                Active = true
 			})
 
 			if ButtonIcon then
@@ -902,33 +905,12 @@ function NextHub:CreateWindow(props)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, 0, 1, 0),
 				Text = "",
-				ZIndex = 10
+				ZIndex = 10,
+                Active = true
 			})
 
-			ClickBtn.MouseButton1Click:Connect(function()
-				task.spawn(function()
-					local mouse = LocalPlayer:GetMouse()
-					local Ripple = Create("Frame", {
-						Parent = ButtonFrame,
-						BackgroundColor3 = Style.Primary,
-						BackgroundTransparency = 0.8,
-						BorderSizePixel = 0,
-						Position = UDim2.new(0, mouse.X - ButtonFrame.AbsolutePosition.X, 0, mouse.Y - ButtonFrame.AbsolutePosition.Y),
-						Size = UDim2.new(0, 0, 0, 0),
-						ZIndex = 5
-					})
-					Create("UICorner", { CornerRadius = UDim.new(1, 0), Parent = Ripple })
-					local Tween = TweenService:Create(Ripple, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-						Size = UDim2.new(0, 200, 0, 200),
-						Position = UDim2.new(0, mouse.X - ButtonFrame.AbsolutePosition.X - 100, 0, mouse.Y - ButtonFrame.AbsolutePosition.Y - 100),
-						BackgroundTransparency = 1
-					})
-					Tween:Play()
-					Tween.Completed:Wait()
-					Ripple:Destroy()
-				end)
-
-				Callback()
+			ClickBtn.Activated:Connect(function()
+                if typeof(Callback) == "function" then Callback() end
 			end)
 
 			LastElementType = "Component"
@@ -1055,7 +1037,8 @@ function NextHub:CreateWindow(props)
 				BackgroundTransparency = 1,
 				BorderSizePixel = 0,
 				Size = UDim2.new(1, 0, 0, 38),
-				LayoutOrder = ElementIndex
+				LayoutOrder = ElementIndex,
+                Active = true
 			})
 
 			local Label = Create("TextLabel", {
@@ -1093,7 +1076,8 @@ function NextHub:CreateWindow(props)
 				Parent = ToggleFrame,
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, 0, 1, 0),
-				Text = ""
+				Text = "",
+                Active = true
 			})
 
 			LastElementType = "Component"
@@ -1118,7 +1102,7 @@ function NextHub:CreateWindow(props)
 				Callback(Toggled)
 			end
 
-			Button.MouseButton1Click:Connect(function()
+			Button.Activated:Connect(function()
 				UpdateToggleState(not Toggled)
 			end)
 
@@ -1174,7 +1158,8 @@ function NextHub:CreateWindow(props)
 				Size = UDim2.new(1, 0, 0, 38),
 				ClipsDescendants = true,
 				ZIndex = 2,
-				LayoutOrder = ElementIndex
+				LayoutOrder = ElementIndex,
+                Active = true,
 			})
 
 			local Label = Create("TextLabel", {
@@ -1218,7 +1203,8 @@ function NextHub:CreateWindow(props)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, 0, 0, 38),
 				Text = "",
-				ZIndex = 3
+				ZIndex = 3,
+                Active = true
 			})
 
 			local SearchBar = Create("TextBox", {
@@ -1298,7 +1284,7 @@ function NextHub:CreateWindow(props)
 				if Open then SearchBar:CaptureFocus() else SearchBar.Text = "" UpdateList("") end
 			end
 
-			Button.MouseButton1Click:Connect(ToggleDropdown)
+			Button.Activated:Connect(ToggleDropdown)
 			SearchBar:GetPropertyChangedSignal("Text"):Connect(function() UpdateList(SearchBar.Text) end)
 
 			local function UpdateItemVisual(btn, item)
@@ -1352,13 +1338,14 @@ function NextHub:CreateWindow(props)
 						TextSize = 13,
 						ZIndex = 3,
 						AutoButtonColor = false,
-						ClipsDescendants = true
+						ClipsDescendants = true,
+                        Active = true
 					})
 					Create("UICorner", { CornerRadius = UDim.new(0, 5), Parent = ItemButton })
 
 					UpdateItemVisual(ItemButton, item)
 
-					ItemButton.MouseButton1Click:Connect(function()
+					ItemButton.Activated:Connect(function()
 						if IsMulti then
 							if table.find(Selected, item) then
 								table.remove(Selected, table.find(Selected, item))
